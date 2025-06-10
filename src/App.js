@@ -1,22 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
+import ChatWidget from './chatWidget';
+import { useState } from 'react';
 
 function App() {
+   const [messages, setMessages] = useState([
+    { text: "Hi! How can I assist you today?", sender: "bot" }
+  ]);
+   const handleUserMessage = (msg) => {
+    // Append user message
+    setMessages(prev => [...prev, { text: msg, sender: 'user' }]);
+
+    // Optionally simulate bot reply after a short delay
+    setTimeout(() => {
+      setMessages(prev => [...prev, { text: 'Thanks for your message!', sender: 'bot' }]);
+    }, 1000);
+  };
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+
+        <h1>Welcome to the Chat Widget Demo</h1>
+        <ChatWidget
+          title="Support"
+        messages={messages}
+        onUserMessage={handleUserMessage}
+          
+        />
       </header>
     </div>
   );
