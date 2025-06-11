@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import ChatWidget from './chatWidget';
+// import ChatWidget from './chatWidget';
 import { useState } from 'react';
+import ChatWidget from 'react-chatify'
+// import ChatWidget from './ChatWidget';
 
 function App() {
    const [messages, setMessages] = useState([
