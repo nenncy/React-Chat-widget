@@ -59,7 +59,8 @@
         //         </>
         //     );
         // }
-        
+import React from 'react';
+       
 import { useState, useEffect } from 'react';
         
 const ChatWidget = ({ title = 'Chat', messages = [], onUserMessage }) => {
