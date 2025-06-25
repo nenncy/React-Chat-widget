@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 function _arrayLikeToArray(r, a) {
   (null == a || a > r.length) && (a = r.length);
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
@@ -44,67 +46,35 @@ function _unsupportedIterableToArray(r, a) {
   }
 }
 
-// import react from 'react';
-// import { useState, useEffect } from 'react';
-// import './chatwidget.css'; // Assuming you have a CSS file for styling
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
 
-// const ChatWidget = ({ title = 'Chat', messages = [], onUserMessage }) => {
-//     // const [messages, setMessages] = useState([]);
-//     const [input, setInput] = useState('');
-//     const [isOpen, setIsOpen] = useState(false);
+  if (typeof document === 'undefined') { return; }
 
-//     const sendMessege = (message) => {
-//         if (message.trim() === "") {
-//             return;
-//         }
-//         // setMessages([...messages, message]);
-//         onUserMessage(message);
-//         setInput('');
-//     }
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
 
-//     return (
-//         <>
-//             <div
-//                 className="chat-toggle-btn"
-//                 onClick={() => setIsOpen(true)}
-//             // title={isOpen ? 'Close Chat' : 'Open Chat'}
-//             >
-//                 💬
-//             </div>
-//             {isOpen && (
-//                 <div className="chat-widget">
-//                     <div className="chat-header">
-//                         <h2>Chat with us!</h2>
-//                         <button className="close-btn" onClick={() => setIsOpen(false)}>Close</button>
-//                     </div>
-//                     <div className="messages">
-//                         {messages.map((msg, i) => (
-//                             <div
-//                                 key={i}
-//                                 className={`message ${msg.sender === 'user' ? 'user-msg' : 'bot-msg'}`} >
-//                                 <p>{msg.text}</p>
-//                             </div>
-//                         ))}
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
 
-//                     </div>
-//                     <div className="chat-input">
-//                         <input
-//                             type="text"
-//                             value={input}
-//                             onChange={(e) => setInput(e.target.value)}
-//                             placeholder="Type your message here..."
-//                             onKeyDown={(e) =>
-//                                 e.key === 'Enter' && sendMessege(input)}
-//                         />
-//                         <button onClick={() => {
-//                             sendMessege(input);
-//                         }}>Send</button>
-//                     </div>
-//                 </div>)
-//             }
-//         </>
-//     );
-// }
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = "/* .chat-widget {\r\n  position: fixed;\r\n  bottom: 20px;\r\n  right: 20px;\r\n  width: 320px;\r\n  height: 450px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  border: 1px solid #ccc;\r\n  border-radius: 10px;\r\n  padding: 12px;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\r\n  background-color: #fff;\r\n  font-family: Arial, sans-serif;\r\n  z-index: 1000;\r\n} */\r\n .chat-toggle-btn {\r\n  position: fixed;\r\n  bottom: 20px;\r\n  right: 20px;\r\n  background-color: #5c9ded;\r\n  color: white;\r\n  width: 50px;\r\n  height: 50px;\r\n  border-radius: 50%;\r\n  font-size: 24px;\r\n  text-align: center;\r\n  line-height: 50px;\r\n  cursor: pointer;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\r\n  z-index: 1001;\r\n}\r\n\r\n.chat-widget {\r\n  position: fixed;\r\n  bottom: 80px; /* to avoid overlapping with the toggle button */\r\n  right: 20px;\r\n  width: 320px;\r\n  height: 450px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  border: 1px solid #ccc;\r\n  border-radius: 10px;\r\n  padding: 12px;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\r\n  background-color: #fff;\r\n  font-family: Arial, sans-serif;\r\n  z-index: 1000;\r\n}\r\n\r\n/* Your existing .messages, .message, .chat-input styles stay unchanged */\r\n\r\n\r\n.chat-widget h2 {\r\n  margin-top: 0;\r\n  margin-bottom: 10px;\r\n  font-size: 18px;\r\n  text-align: center;\r\n  color: #333;\r\n}\r\n\r\n.messages {\r\n  flex: 1;\r\n  overflow-y: auto;\r\n  border: 1px solid #eee;\r\n  padding: 8px;\r\n  margin-bottom: 10px;\r\n  border-radius: 6px;\r\n  background-color: #f9f9f9;\r\n}\r\n\r\n.message {\r\n  background-color: #e6f0ff;\r\n  padding: 8px 10px;\r\n  margin-bottom: 6px;\r\n  border-radius: 6px;\r\n  font-size: 14px;\r\n  color: #333;\r\n}\r\n\r\n.chat-input {\r\n  display: flex;\r\n  gap: 8px;\r\n}\r\n\r\n.chat-input input {\r\n  flex: 1;\r\n  padding: 8px;\r\n  border: 1px solid #ccc;\r\n  border-radius: 6px;\r\n  font-size: 14px;\r\n  outline: none;\r\n  transition: border 0.2s ease-in-out;\r\n}\r\n\r\n.chat-input input:focus {\r\n  border-color: #5c9ded;\r\n}\r\n\r\n.chat-input button {\r\n  padding: 8px 14px;\r\n  background-color: #5c9ded;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 6px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n  transition: background-color 0.2s ease;\r\n}\r\n\r\n.chat-input button:hover {\r\n  background-color: #468ce1;\r\n}\r\n\r\n.chat-header {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  margin-bottom: 10px;\r\n}\r\n\r\n.chat-header h2 {\r\n  margin: 0;\r\n  font-size: 18px;\r\n  color: #333;\r\n}\r\n\r\n.close-btn {\r\n  background-color: transparent;\r\n  border: none;\r\n  font-size: 15px;\r\n  color: #666;\r\n  cursor: pointer;\r\n  transition: color 0.2s ease-in-out;\r\n}\r\n\r\n.close-btn:hover {\r\n  color: #e74c3c; /* red on hover */\r\n}\r\n\r\n\r\n.messages {\r\n  flex: 1;\r\n  display: flex;\r\n  flex-direction: column;\r\n  overflow-y: auto;\r\n  padding: 8px;\r\n  background-color: #f9f9f9;\r\n  border: 1px solid #eee;\r\n  border-radius: 6px;\r\n}\r\n\r\n.message {\r\n  max-width: 70%;\r\n  padding: 8px 12px;\r\n  margin-bottom: 8px;\r\n  border-radius: 12px;\r\n  font-size: 14px;\r\n  line-height: 1.4;\r\n  word-wrap: break-word;\r\n}\r\n\r\n.user-msg {\r\n  background-color: #dcf8c6;\r\n  align-self: flex-end;\r\n  margin-left: auto;\r\n  border-top-right-radius: 0;\r\n}\r\n\r\n.bot-msg {\r\n  background-color: #f1f0f0;\r\n  align-self: flex-start;\r\n  margin-right: auto;\r\n  border-top-left-radius: 0;\r\n}\r\n";
+styleInject(css_248z);
 
 var ChatWidget = function ChatWidget(_ref) {
   var _ref$title = _ref.title,
@@ -168,35 +138,5 @@ var ChatWidget = function ChatWidget(_ref) {
     }
   }, "Send"))));
 };
-
-function styleInject(css, ref) {
-  if ( ref === void 0 ) ref = {};
-  var insertAt = ref.insertAt;
-
-  if (typeof document === 'undefined') { return; }
-
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
-  } else {
-    head.appendChild(style);
-  }
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
-}
-
-var css_248z = "/* .chat-widget {\r\n  position: fixed;\r\n  bottom: 20px;\r\n  right: 20px;\r\n  width: 320px;\r\n  height: 450px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  border: 1px solid #ccc;\r\n  border-radius: 10px;\r\n  padding: 12px;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\r\n  background-color: #fff;\r\n  font-family: Arial, sans-serif;\r\n  z-index: 1000;\r\n} */\r\n .chat-toggle-btn {\r\n  position: fixed;\r\n  bottom: 20px;\r\n  right: 20px;\r\n  background-color: #5c9ded;\r\n  color: white;\r\n  width: 50px;\r\n  height: 50px;\r\n  border-radius: 50%;\r\n  font-size: 24px;\r\n  text-align: center;\r\n  line-height: 50px;\r\n  cursor: pointer;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\r\n  z-index: 1001;\r\n}\r\n\r\n.chat-widget {\r\n  position: fixed;\r\n  bottom: 80px; /* to avoid overlapping with the toggle button */\r\n  right: 20px;\r\n  width: 320px;\r\n  height: 450px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  border: 1px solid #ccc;\r\n  border-radius: 10px;\r\n  padding: 12px;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\r\n  background-color: #fff;\r\n  font-family: Arial, sans-serif;\r\n  z-index: 1000;\r\n}\r\n\r\n/* Your existing .messages, .message, .chat-input styles stay unchanged */\r\n\r\n\r\n.chat-widget h2 {\r\n  margin-top: 0;\r\n  margin-bottom: 10px;\r\n  font-size: 18px;\r\n  text-align: center;\r\n  color: #333;\r\n}\r\n\r\n.messages {\r\n  flex: 1;\r\n  overflow-y: auto;\r\n  border: 1px solid #eee;\r\n  padding: 8px;\r\n  margin-bottom: 10px;\r\n  border-radius: 6px;\r\n  background-color: #f9f9f9;\r\n}\r\n\r\n.message {\r\n  background-color: #e6f0ff;\r\n  padding: 8px 10px;\r\n  margin-bottom: 6px;\r\n  border-radius: 6px;\r\n  font-size: 14px;\r\n  color: #333;\r\n}\r\n\r\n.chat-input {\r\n  display: flex;\r\n  gap: 8px;\r\n}\r\n\r\n.chat-input input {\r\n  flex: 1;\r\n  padding: 8px;\r\n  border: 1px solid #ccc;\r\n  border-radius: 6px;\r\n  font-size: 14px;\r\n  outline: none;\r\n  transition: border 0.2s ease-in-out;\r\n}\r\n\r\n.chat-input input:focus {\r\n  border-color: #5c9ded;\r\n}\r\n\r\n.chat-input button {\r\n  padding: 8px 14px;\r\n  background-color: #5c9ded;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 6px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n  transition: background-color 0.2s ease;\r\n}\r\n\r\n.chat-input button:hover {\r\n  background-color: #468ce1;\r\n}\r\n\r\n.chat-header {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  margin-bottom: 10px;\r\n}\r\n\r\n.chat-header h2 {\r\n  margin: 0;\r\n  font-size: 18px;\r\n  color: #333;\r\n}\r\n\r\n.close-btn {\r\n  background-color: transparent;\r\n  border: none;\r\n  font-size: 15px;\r\n  color: #666;\r\n  cursor: pointer;\r\n  transition: color 0.2s ease-in-out;\r\n}\r\n\r\n.close-btn:hover {\r\n  color: #e74c3c; /* red on hover */\r\n}\r\n\r\n\r\n.messages {\r\n  flex: 1;\r\n  display: flex;\r\n  flex-direction: column;\r\n  overflow-y: auto;\r\n  padding: 8px;\r\n  background-color: #f9f9f9;\r\n  border: 1px solid #eee;\r\n  border-radius: 6px;\r\n}\r\n\r\n.message {\r\n  max-width: 70%;\r\n  padding: 8px 12px;\r\n  margin-bottom: 8px;\r\n  border-radius: 12px;\r\n  font-size: 14px;\r\n  line-height: 1.4;\r\n  word-wrap: break-word;\r\n}\r\n\r\n.user-msg {\r\n  background-color: #dcf8c6;\r\n  align-self: flex-end;\r\n  margin-left: auto;\r\n  border-top-right-radius: 0;\r\n}\r\n\r\n.bot-msg {\r\n  background-color: #f1f0f0;\r\n  align-self: flex-start;\r\n  margin-right: auto;\r\n  border-top-left-radius: 0;\r\n}\r\n";
-styleInject(css_248z);
 
 export { ChatWidget as default };
