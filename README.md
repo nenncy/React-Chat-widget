@@ -87,6 +87,10 @@ export default App;
 Check out a live integration on my portfolio:  
 **https://portfolio-eight-orcin-51.vercel.app/**
 
+## 🔗 Check out github:
+
+**https://github.com/nenncy/React-Chat-widget/tree/chatify-react/**
+
 ## 🧠 Gemini/LLM Integration (Optional)
 
 You can connect this with any LLM backend (e.g., Gemini, GPT) by sending the user's message to your `/api/` endpoint and returning the response as shown above.
